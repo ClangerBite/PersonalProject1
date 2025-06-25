@@ -1,0 +1,15 @@
+# Environments
+.venv/
+.venvDaisyCatTaxGUI/
+.vscode/
+
+# Python
+__pycache__/
+
+# Unit tests
+.pytest_cache/
+
+# Sensitive data
+logs/*
+sensitive/*
+results/*
