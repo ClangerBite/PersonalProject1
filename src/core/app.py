@@ -2,6 +2,8 @@ from src.core.get_files import get_filenames
 from src.core.get_json import get_json
 from src.error_handling.logging_system import log, log_debug, log_fileIO
 
+from src.core import bond_return
+
 
   
 def run_application():
@@ -14,7 +16,7 @@ def run_application():
     
     # print(files) 
        
-    print("\n".join(files))
+    # print("\n".join(files))
     
 
     
