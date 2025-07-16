@@ -1,22 +1,15 @@
 # /////////////////////////////////////////////////////////////////////////////
-# © 2023 SUNIL J. PATEL
-# VERSION: 1.0.0
-#
-# This module contains context managers used in the application.
+# UTILITY MODULE - CONTAINS CONTEXT MANAGERS
 # /////////////////////////////////////////////////////////////////////////////
 
-
-# IMPORT PACKAGES, MODULES, CLASSES AND CLASS INSTANCES
-# /////////////////////////////////////////////////////////////////////////////
 import os
 from contextlib import contextmanager
 
 
-# CONTEXT MANAGERS
+# CONTEXT MANAGER TO TEMPORARILY CHANGE THE CURRENT WORKING DIRECTORY
 # /////////////////////////////////////////////////////////////////////////////
 @contextmanager
 def directory(path):
-    """Temporarily change current working directory to path directory."""
     try:
         cwd = os.getcwd()
         os.chdir(path)

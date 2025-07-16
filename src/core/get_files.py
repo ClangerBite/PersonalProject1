@@ -1,13 +1,22 @@
 import os
-from src.context_managers import directory
+from src.utilities.context_managers import directory
+from src.error_handling import exceptions
 
   
 # Returns a list of lists of all files in a directory and its subdirectories
 # ///////////////////////////////////////////////////////////////////////////// 
 def get_filenames(dir):
+    if not directory_exists(dir):
+        raise exceptions.DirectoryNotFoundError(dir)
     return flatten_list(files_in_directory_and_subdirectories(dir))
 
 
+# Check if directory exists
+# /////////////////////////////////////////////////////////////////////////////   
+def directory_exists(dir):
+    return True if os.path.isdir(dir) else False
+        
+        
 # Joins list of lists into a single flat list
 # ///////////////////////////////////////////////////////////////////////////// 
 def flatten_list(list_of_lists):
@@ -18,9 +27,6 @@ def flatten_list(list_of_lists):
 # /////////////////////////////////////////////////////////////////////////////   
 def files_in_directory_and_subdirectories(dir):
     with directory(dir):
-        if not os.path.isdir(dir):
-            return f'Error: "{dir}" is not a directory'
-
         try:
             return list(map(
                 lambda i: build_line(dir,i) 
@@ -29,8 +35,8 @@ def files_in_directory_and_subdirectories(dir):
                 os.listdir(dir))
                 )
         
-        except Exception as e:
-            return f"Error listing files: {e}"
+        except Exception as err:
+            raise exceptions.ListFilesError(err) 
     
 
 # Returns the filepath for a specific item in a directory
@@ -39,7 +45,7 @@ def build_line(dir, item):
     try:
         filepath = os.path.join(dir, item)
     
-    except Exception as e:
-        return f"Error creating filepath for item {item} in directory {dir}: {e}"   
+    except Exception as err:
+        raise exceptions.FilePathCreationError(item, dir, err)   
         
     return filepath 
