@@ -3,7 +3,7 @@
 # /////////////////////////////////////////////////////////////////////////////
 
 
-from src.error_handling.logging_system import log, log_debug, log_fileIO
+from src.error_handling.logger_instances import default_log, fileio_log, debug_log
 
 
 # /////////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ class DirectoryNotFoundError(Error):
 
   def __init__(self, dir):
     message = f'Directory does not exist: "{dir}"'
-    log_fileIO.error(message, stacklevel = 2)
+    fileio_log.error(message, stacklevel = 2)
     super().__init__(message)
     
 
@@ -27,7 +27,7 @@ class FilePathCreationError(Error):
 
   def __init__(self, item, dir, err):
     message = f"Error creating filepath for item {item} in directory {dir}: {err}"
-    log_fileIO.error(message, stacklevel = 2)
+    fileio_log.error(message, stacklevel = 2)
     super().__init__(message)    
     
 
@@ -37,5 +37,5 @@ class ListFilesError(Error):
 
   def __init__(self, err):
     message = f"Error listing files: {err}"
-    log_fileIO.error(message, stacklevel = 2)
+    fileio_log.error(message, stacklevel = 2)
     super().__init__(message)    
