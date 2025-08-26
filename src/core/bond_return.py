@@ -1,5 +1,5 @@
 from datetime import date
-from src.error_handling.logger_instances import default_log, fileio_log, debug_log
+from src.logs.application_logs import default_log, fileio_log, debug_log
 
 
 # Create list of future dividend dates
@@ -42,41 +42,42 @@ def date_as_string(date):
     return date.isoformat()
 
 
-# TEST DATA & FUNCTION CALLS
-security = {
-    'ticker': 'RCC',
-    'underlying_ticker': 'RC',
-    'underlying': 'Ready Capital Corp',
-    'type': 'fixed',
-    'par': 25,
-    'currency': 'US$',
-    'coupon': 0.0575,
-    'frequency': 4,
-    'maturity': date(2026, 2, 15),
-    'first_call': date(2025, 4, 30),
-    'set_call_dates': False,
-    'call_notice_period': 30,
-    'current_price': 24.5,
-    'ex_div_dates': [date(1000, 1, 14),date(1000, 4, 14), date(1000, 7, 14), date(1000, 10, 14)],
-    'payment_dates': [date(1000, 1, 30),date(1000, 4, 30), date(1000, 7, 30), date(1000, 10, 30)]    
-}
+def test_bond_yield_calcs():
+    # TEST DATA & FUNCTION CALLS
+    security = {
+        'ticker': 'RCC',
+        'underlying_ticker': 'RC',
+        'underlying': 'Ready Capital Corp',
+        'type': 'fixed',
+        'par': 25,
+        'currency': 'US$',
+        'coupon': 0.0575,
+        'frequency': 4,
+        'maturity': date(2026, 2, 15),
+        'first_call': date(2025, 4, 30),
+        'set_call_dates': False,
+        'call_notice_period': 30,
+        'current_price': 24.5,
+        'ex_div_dates': [date(1000, 1, 14),date(1000, 4, 14), date(1000, 7, 14), date(1000, 10, 14)],
+        'payment_dates': [date(1000, 1, 30),date(1000, 4, 30), date(1000, 7, 30), date(1000, 10, 30)]    
+    }
 
-regular_dividend_dates = list(zip(security['ex_div_dates'], security['payment_dates']))
+    regular_dividend_dates = list(zip(security['ex_div_dates'], security['payment_dates']))
 
-dividend_dates_to_maturity = generate_dividend_dates(regular_dividend_dates, security['maturity'])
+    dividend_dates_to_maturity = generate_dividend_dates(regular_dividend_dates, security['maturity'])
 
-# Need a function to check if first call date has passed - if so, is there another set date or is it 30 days from today?
-# Are there special terms for early calls (eg 105% of par)?
+    # Need a function to check if first call date has passed - if so, is there another set date or is it 30 days from today?
+    # Are there special terms for early calls (eg 105% of par)?
 
 
-# Note - use ex-div dates to create the list of future dividends but use payemnt dates for IRR calculation
-# If there is an irregular dividend at the end, it will need to be calculated
-# Stripped price will need to be calculated too in order to arrive at stripped yield etc
+    # Note - use ex-div dates to create the list of future dividends but use payemnt dates for IRR calculation
+    # If there is an irregular dividend at the end, it will need to be calculated
+    # Stripped price will need to be calculated too in order to arrive at stripped yield etc
 
-print("Ex-div dates:")
-for item in dividend_dates_to_maturity:
-    print(date_as_string(item[0]))
+    print("Ex-div dates:")
+    for item in dividend_dates_to_maturity:
+        print(date_as_string(item[0]))
 
-print("Payment dates:")
-for item in dividend_dates_to_maturity:
-    print(date_as_string(item[1]))
+    print("Payment dates:")
+    for item in dividend_dates_to_maturity:
+        print(date_as_string(item[1]))

@@ -1,15 +1,13 @@
-import os
 import json
+from src.file_IO.filepath_utilities import get_abs_path
 
   
-# Returns the filepath for a specific item in a directory
 # ///////////////////////////////////////////////////////////////////////////// 
-def get_json(file_path):
+def read_json(file_path):
+    """Read and parse a JSON file, returning its contents as a dictionary"""
     
-    abs_path = os.path.abspath(file_path)
-    
-    try:
-        with open(abs_path) as file:
+    try:        
+        with open(get_abs_path(file_path)) as file:
             parsed_json = json.load(file)
             
     except Exception as e:

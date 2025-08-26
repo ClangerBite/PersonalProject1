@@ -1,5 +1,21 @@
 # /////////////////////////////////////////////////////////////////////////////
-# LOGGING SYSTEM MODULE
+# LOGGING SYSTEM 
+#
+# This module provides a logging system with configurable loggers. It allows the 
+# creation of multiple loggers with different settings within a LoggerFactory class
+#
+# This module can be re-used across multiple applications. The actual loggers created 
+# for use in an application are set up in a separate module (log_instances.py).
+#
+# Compulsory configurations:
+#   1. logger name
+#   2. log file path
+#
+# Optional configurations:
+#   1. log level (default is INFO)
+#   2. format of the log message (default is 'long' but console is always 'short')
+#   3. whether to output to console as well (default is disabled)
+#
 # /////////////////////////////////////////////////////////////////////////////
 
 import logging
@@ -9,6 +25,7 @@ from typing import Dict, Any
 from dataclasses import dataclass
 
 
+# /////////////////////////////////////////////////////////////////////////////
 @dataclass
 class LogConfig:
     """Configuration settings for loggers"""
@@ -33,6 +50,7 @@ def setup_logger(
     logger_name: str,
     log_file: str,
     level: int = logging.INFO,
+    format: str = 'long',
     console: bool = False
 ) -> logging.Logger:
     """Set up a logger with improved error handling"""
@@ -43,7 +61,7 @@ def setup_logger(
         logger.setLevel(level)
         
         # Add rotating file handler
-        file_handler = create_rotating_handler(log_file, format='long')
+        file_handler = create_rotating_handler(log_file, format)
         logger.addHandler(file_handler)
         
         if console:
@@ -63,6 +81,7 @@ def ensure_log_directory_exists(log_path: str) -> None:
         os.makedirs(os.path.dirname(log_path), exist_ok=True)
     except Exception as e:
         raise RuntimeError(f"Failed to create log directory: {e}")
+    
       
 # /////////////////////////////////////////////////////////////////////////////
 def get_logger(logger_name):
@@ -118,8 +137,7 @@ def log_format(format):
     date_format = f'%H:%M:%S'
 
   return logging.Formatter(msg_format, date_format)
-  
-  
+    
 
 # ////////////////////////////////////////////////////////////////////////////
 class LoggerFactory:
@@ -133,25 +151,3 @@ class LoggerFactory:
             cls._loggers[name] = setup_logger(name, **kwargs)
         return cls._loggers[name]
 
-
-# ////////////////////////////////////////////////////////////////////////////
-def initialize_application_loggers():
-    """Initialize all application loggers"""
-    LoggerFactory.get_logger(
-        'default',
-        log_file='logs/default.log'
-    )
-    LoggerFactory.get_logger(
-        'fileIO',
-        log_file='logs/fileIO.log',
-        level=logging.WARNING,
-        console=True
-    )
-    LoggerFactory.get_logger(
-        'debug',
-        log_file='logs/debug.log',
-        level=logging.DEBUG
-    )
-
-# Initialize loggers
-initialize_application_loggers()
