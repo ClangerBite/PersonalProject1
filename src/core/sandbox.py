@@ -1,7 +1,7 @@
 import tabula
 import pandas as pd
 from typing import List, Union
-from src.logs.application_logs import fileio_log, default_log
+from src.logs.application_logs import log_error, log_debug
 from src.file_IO.filepath_utilities import get_filepath
 from src.file_IO.json_utilities import read_json
 
@@ -24,7 +24,7 @@ def extract_tables_from_pdf(file_path: str, pages: Union[str, List[int]] = 'all'
         Exception: For other PDF processing errors
     """
     try:
-        fileio_log.info(f"Extracting tables from PDF: {file_path}")
+        log_error.info(f"Extracting tables from PDF: {file_path}")
         
         # Extract tables using tabula
         tables = tabula.read_pdf(
@@ -36,7 +36,7 @@ def extract_tables_from_pdf(file_path: str, pages: Union[str, List[int]] = 'all'
             pandas_options={'dtype': str}  # Convert all columns to string initially
         )
         
-        fileio_log.info(f"Successfully extracted {len(tables)} tables")
+        log_error.info(f"Successfully extracted {len(tables)} tables")
         
         # Clean up the DataFrames
         cleaned_tables = []
@@ -47,16 +47,16 @@ def extract_tables_from_pdf(file_path: str, pages: Union[str, List[int]] = 'all'
             # Reset index after dropping rows
             df = df.reset_index(drop=True)
             
-            fileio_log.debug(f"Table {idx} shape: {df.shape}")
+            log_error.debug(f"Table {idx} shape: {df.shape}")
             cleaned_tables.append(df)
             
         return cleaned_tables
         
     except FileNotFoundError:
-        fileio_log.error(f"PDF file not found: {file_path}")
+        log_error.error(f"PDF file not found: {file_path}")
         raise
     except Exception as e:
-        fileio_log.error(f"Error extracting tables from PDF {file_path}: {str(e)}")
+        log_error.error(f"Error extracting tables from PDF {file_path}: {str(e)}")
         raise
 
 # Example usage
@@ -69,12 +69,12 @@ def read_pdf():
         
         # Print info and full content of each table
         for idx, df in enumerate(tables, 1):
-            default_log.info(f"\nTable {idx} - Shape: {df.shape}")
+            log_debug.info(f"\nTable {idx} - Shape: {df.shape}")
             # Show full table instead of just head()
             with pd.option_context('display.max_rows', None, 
                                  'display.max_columns', None,
                                  'display.width', None):
-                default_log.info(f"\n{df}")
+                log_debug.info(f"\n{df}")
             
     except Exception as e:
-        default_log.info(f"Error: {e}")
+        log_debug.info(f"Error: {e}")

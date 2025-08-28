@@ -28,20 +28,21 @@ def initialize_application_loggers():
     to set up the loggers used throughout the application.
     """
     LoggerFactory.get_logger(
-        'default',
-        log_file='logs/default.log',
-        format='short'
-    )
-    LoggerFactory.get_logger(
-        'fileIO',
-        log_file='logs/fileIO.log',
-        level=logging.WARNING,
-        console=True
-    )
-    LoggerFactory.get_logger(
         'debug',
         log_file='logs/debug.log',
-        level=logging.DEBUG
+        format='short',
+        level=logging.DEBUG,
+    )
+    LoggerFactory.get_logger(
+        'errors',
+        log_file='logs/errors.log',
+        level=logging.WARNING,
+        console=True,
+    )
+    LoggerFactory.get_logger(
+        'output',
+        log_file='logs/output.log',
+        level=logging.INFO,
     )
 
 # /////////////////////////////////////////////////////////////////////////////
@@ -49,6 +50,6 @@ def initialize_application_loggers():
 initialize_application_loggers()
 
 # Names of logger instances to be exported for use in other modules
-default_log = LoggerFactory.get_logger('default')
-fileio_log = LoggerFactory.get_logger('fileIO')
-debug_log = LoggerFactory.get_logger('debug')
+log_debug = LoggerFactory.get_logger('debug')
+log_error = LoggerFactory.get_logger('errors')
+log_output = LoggerFactory.get_logger('output')

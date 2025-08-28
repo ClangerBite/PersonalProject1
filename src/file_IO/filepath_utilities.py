@@ -69,4 +69,8 @@ def get_filepath(dir, item):
 # /////////////////////////////////////////////////////////////////////////////   
 def get_abs_path(file_path):
     """Get the absolute path of a file from its relative path"""    
-    return os.path.abspath(file_path)
+    try:
+        return os.path.abspath(file_path)
+
+    except Exception as err:
+        raise exceptions.AbsolutePathCreationError(file_path, err)  

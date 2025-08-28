@@ -1,11 +1,11 @@
 from datetime import date
-from src.logs.application_logs import default_log, fileio_log, debug_log
+from src.logs.application_logs import log_debug, log_error, log_output
 
 
 # Create list of future dividend dates
 def generate_dividend_dates(regular_dates, end_date):
     if not end_date:
-        debug_log.warning("NO MATURITY")
+        log_output.warning("NO MATURITY")
         return
 
     regular_date_list = append_regular_dates(regular_dates, end_date)
